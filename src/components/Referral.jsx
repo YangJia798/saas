@@ -1,4 +1,4 @@
-function Referral() {
+export default function Referral() {
   return (
     <section>
       <h2>推荐管理</h2>

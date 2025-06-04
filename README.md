@@ -1,7 +1,12 @@
 # saas React 版本
 
-该项目已由单个 HTML 页面转换为 React 结构，并将各功能页面拆分为独立组件。
+该项目已由单个 HTML 页面转换为标准 React 项目，页面被拆分为独立组件并使用 Vite 构建。
 
 ## 运行方式
 
-无需打包工具，直接打开 `public/index.html` 即可在浏览器中查看。
+安装依赖后运行开发服务器即可预览：
+
+```bash
+npm install
+npm run dev
+```
