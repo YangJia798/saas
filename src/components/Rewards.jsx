@@ -1,4 +1,4 @@
-function Rewards() {
+export default function Rewards() {
   return (
     <section>
       <h2>收益管理</h2>
