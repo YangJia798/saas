@@ -1,4 +1,4 @@
-function History() {
+export default function History() {
   return (
     <section>
       <h2>历史记录</h2>
