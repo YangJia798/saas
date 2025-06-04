@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWA IDO - 去中心化投资平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #64ffda;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #64ffda;
+        }
+
+        .wallet-connect {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .wallet-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+        }
+
+        /* 主要内容区 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        /* 标签页导航 */
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 标签页内容 */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 投资页面 */
+        .invest-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h3 {
+            color: #64ffda;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+        }
+
+        /* 投资档位选择 */
+        .investment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            border-color: #64ffda;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+            border-color: #64ffda;
+        }
+
+        .option-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .option-bonus {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* 自定义金额输入 */
+        .custom-amount {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #64ffda;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+
+        /* 投资按钮 */
+        .invest-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .invest-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.3);
+        }
+
+        .invest-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* 用户信息卡片 */
+        .user-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .info-label {
+            color: #64ffda;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* 收益管理页面 */
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .reward-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .reward-type {
+            color: #64ffda;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .reward-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .claim-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .claim-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+        }
+
+        .claim-btn:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        /* 等级进度 */
+        .level-progress {
+            margin-bottom: 1.5rem;
+        }
+
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .current-level {
+            background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+            color: #0f0f23;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64ffda 0%, #00bcd4 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* 推荐管理 */
+        .referral-link {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .referral-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            background: rgba(100, 255, 218, 0.2);
+            border: 1px solid #64ffda;
+            color: #64ffda;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #64ffda;
+            color: #0f0f23;
+        }
+
+        /* 移动端菜单 */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+            padding: 1rem;
+        }
+
+        .mobile-nav.show {
+            display: block;
+        }
+
+        .mobile-nav a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: color 0.3s;
+        }
+
+        .mobile-nav a:hover, .mobile-nav a.active {
+            color: #64ffda;
+        }
+
+        /* 底部导航栏（移动端） */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            z-index: 1000;
+        }
+
+        .bottom-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            min-width: 60px;
+        }
+
+        .bottom-nav-item.active {
+            color: #64ffda;
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .bottom-nav-item:hover {
+            color: #64ffda;
+        }
+
+        .bottom-nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .wallet-connect {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .main-container {
+                padding: 5rem 1rem 5rem;
+            }
+
+            .invest-section {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .investment-options {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .option-btn {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .option-amount {
+                font-size: 1rem;
+            }
+
+            .option-bonus {
+                font-size: 0.75rem;
+            }
+
+            .rewards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .user-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.75rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .bottom-nav {
+                display: block;
+            }
+
+            /* 隐藏桌面版标签导航 */
+            .tab-navigation {
+                display: none;
+            }
+
+            /* 调整按钮大小 */
+            .invest-btn, .claim-btn {
+                padding: 0.875rem;
+                font-size: 1rem;
+            }
+
+            /* 调整输入框 */
+            .input-field {
+                padding: 0.875rem;
+                font-size: 1rem;
+            }
+
+            /* 调整信息项 */
+            .info-item {
+                padding: 0.75rem;
+            }
+
+            .info-value {
+                font-size: 1.1rem;
+            }
+
+            /* 调整奖励卡片 */
+            .reward-card {
+                padding: 1.25rem;
+            }
+
+            .reward-amount {
+                font-size: 1.3rem;
+            }
+
+            /* 调整推荐链接 */
+            .referral-link {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .copy-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* 调整等级进度 */
+            .level-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            .current-level {
+                align-self: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 4rem 0.75rem 5rem;
+            }
+
+            .card {
+                padding: 1.25rem;
+                border-radius: 12px;
+            }
+
+            .investment-options {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .option-btn {
+                padding: 1rem;
+            }
+
+            .user-info {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .nav-container {
+                padding: 0 0.75rem;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .wallet-connect {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            /* 非常小屏幕的特殊处理 */
+            .reward-card {
+                padding: 1rem;
+            }
+
+            .card h3 {
+                font-size: 1rem;
+            }
+
+            .info-value {
+                font-size: 1rem;
+            }
+
+            .reward-amount {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* 横屏模式优化 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .main-container {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+
+            .investment-options {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .user-info {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .rewards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .option-btn:hover,
+            .tab-btn:hover,
+            .claim-btn:hover,
+            .invest-btn:hover,
+            .copy-btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .option-btn:active,
+            .tab-btn:active,
+            .claim-btn:active,
+            .invest-btn:active,
+            .copy-btn:active {
+                transform: scale(0.98);
+            }
+
+            /* 增大可点击区域 */
+            .bottom-nav-item {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .option-btn {
+                min-height: 60px;
+            }
+
+            .claim-btn,
+            .invest-btn {
+                min-height: 48px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* 状态指示器 */
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-active {
+            background: #4caf50;
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+        }
+
+        .status-pending {
+            background: #ff9800;
+            box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
+        }
+
+        .status-inactive {
+            background: #757575;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <span>🌟</span>
+                <span>RWA IDO</span>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="active" onclick="switchTab('invest')">投资</a></li>
+                    <li><a href="#" onclick="switchTab('rewards')">收益</a></li>
+                    <li><a href="#" onclick="switchTab('referral')">推荐</a></li>
+                    <li><a href="#" onclick="switchTab('history')">历史</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span id="menu-icon">☰</span>
+            </button>
+            <button class="wallet-connect" onclick="connectWallet()">
+                <span id="wallet-status">连接钱包</span>
+            </button>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#" class="active" onclick="switchTab('invest'); toggleMobileMenu();">投资管理</a>
+            <a href="#" onclick="switchTab('rewards'); toggleMobileMenu();">收益管理</a>
+            <a href="#" onclick="switchTab('referral'); toggleMobileMenu();">推荐管理</a>
+            <a href="#" onclick="switchTab('history'); toggleMobileMenu();">历史记录</a>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="main-container">
+        <!-- 标签页导航 -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="switchTab('invest')">投资管理</button>
+            <button class="tab-btn" onclick="switchTab('rewards')">收益管理</button>
+            <button class="tab-btn" onclick="switchTab('referral')">推荐管理</button>
+            <button class="tab-btn" onclick="switchTab('history')">历史记录</button>
+        </div>
+
+        <!-- 投资管理标签页 -->
+        <div id="invest-tab" class="tab-content active">
+            <div class="invest-section">
+                <!-- 投资操作面板 -->
+                <div class="card">
+                    <h3>💰 选择投资档位</h3>
+                    
+                    <div class="investment-options">
+                        <div class="option-btn" data-amount="500">
+                            <div class="option-amount">500 USDT</div>
+                            <div class="option-bonus">+30 RWA</div>
+                        </div>
+                        <div class="option-btn" data-amount="1000">
+                            <div class="option-amount">1,000 USDT</div>
+                            <div class="option-bonus">+70 RWA</div>
+                        </div>
+                        <div class="option-btn" data-amount="5000">
+                            <div class="option-amount">5,000 USDT</div>
+                            <div class="option-bonus">+400 RWA</div>
+                        </div>
+                        <div class="option-btn" data-amount="10000">
+                            <div class="option-amount">10,000 USDT</div>
+                            <div class="option-bonus">+900 RWA</div>
+                        </div>
+                    </div>
+
+                    <div class="custom-amount">
+                        <div class="input-group">
+                            <label>自定义投资金额（最低100 USDT）</label>
+                            <input type="number" class="input-field" placeholder="输入投资金额" min="100" id="customAmount">
+                        </div>
+                        <div class="input-group">
+                            <label>推荐人地址（可选）</label>
+                            <input type="text" class="input-field" placeholder="0x..." id="referrerAddress">
+                        </div>
+                    </div>
+
+                    <button class="invest-btn" onclick="invest()">
+                        确认投资
+                    </button>
+                </div>
+
+                <!-- 用户信息面板 -->
+                <div class="card">
+                    <h3>📊 我的投资概览</h3>
+                    
+                    <div class="user-info">
+                        <div class="info-item">
+                            <div class="info-label">当前周期</div>
+                            <div class="info-value" id="currentCycle">1</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">本周期投资</div>
+                            <div class="info-value" id="cycleInvest">0 USDT</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">历史总投资</div>
+                            <div class="info-value" id="totalInvest">0 USDT</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">推荐人数</div>
+                            <div class="info-value" id="referralCount">0 人</div>
+                        </div>
+                    </div>
+
+                    <!-- 等级进度 -->
+                    <div class="level-progress">
+                        <div class="level-info">
+                            <span class="current-level" id="currentLevel">V0</span>
+                            <span id="nextLevelInfo">距离V1还需 50,000 USDT</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="levelProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 周期状态 -->
+                    <div class="input-group">
+                        <label>
+                            <span class="status-indicator status-active"></span>
+                            周期状态：活跃中
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 收益管理标签页 -->
+        <div id="rewards-tab" class="tab-content">
+            <div class="rewards-grid">
+                <!-- 静态收益 -->
+                <div class="reward-card">
+                    <div class="reward-type">静态收益</div>
+                    <div class="reward-amount" id="staticReward">0 RWA</div>
+                    <div style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                        每日释放千分之2.5
+                    </div>
+                    <button class="claim-btn" onclick="claimStatic()" id="claimStaticBtn">
+                        领取静态收益
+                    </button>
+                </div>
+
+                <!-- 动态收益 -->
+                <div class="reward-card">
+                    <div class="reward-type">动态收益</div>
+                    <div class="reward-amount" id="dynamicReward">0 RWA</div>
+                    <div style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                        需要直推3人且投资≥1000U
+                    </div>
+                    <button class="claim-btn" onclick="claimDynamic()" id="claimDynamicBtn">
+                        领取动态收益
+                    </button>
+                </div>
+
+                <!-- 等级奖励 -->
+                <div class="reward-card">
+                    <div class="reward-type">等级奖励</div>
+                    <div class="reward-amount" id="levelReward">0 RWA</div>
+                    <div style="margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                        按等级比例释放剩余金额
+                    </div>
+                    <button class="claim-btn" onclick="claimLevel()" id="claimLevelBtn">
+                        领取等级奖励
+                    </button>
+                </div>
+            </div>
+
+            <!-- 收益统计 -->
+            <div class="card">
+                <h3>📈 收益统计</h3>
+                <div class="user-info">
+                    <div class="info-item">
+                        <div class="info-label">已领取静态</div>
+                        <div class="info-value" id="claimedStatic">0 RWA</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">已领取动态</div>
+                        <div class="info-value" id="claimedDynamic">0 RWA</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">钱包余额</div>
+                        <div class="info-value" id="walletBalance">0 RWA</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">剩余可释放</div>
+                        <div class="info-value" id="remainingAmount">0 RWA</div>
+                    </div>
+                </div>
+
+                <!-- 提币功能 -->
+                <div class="input-group">
+                    <label>提币数量（扣除5%手续费）</label>
+                    <input type="number" class="input-field" placeholder="输入提币数量" id="withdrawAmount">
+                </div>
+                <button class="invest-btn" onclick="withdraw()">
+                    提币到钱包
+                </button>
+            </div>
+        </div>
+
+        <!-- 推荐管理标签页 -->
+        <div id="referral-tab" class="tab-content">
+            <div class="card">
+                <h3>🔗 我的推荐链接</h3>
+                <div class="referral-link">
+                    <input type="text" class="referral-input" readonly value="https://rwa-ido.com/?ref=0x1234...abcd" id="referralLink">
+                    <button class="copy-btn" onclick="copyReferralLink()">复制</button>
+                </div>
+                
+                <div class="user-info">
+                    <div class="info-item">
+                        <div class="info-label">推荐总人数</div>
+                        <div class="info-value" id="totalReferrals">0 人</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">有效推荐</div>
+                        <div class="info-value" id="validReferrals">0 人</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">推荐收益</div>
+                        <div class="info-value" id="referralEarnings">0 RWA</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">动态收益状态</div>
+                        <div class="info-value" id="dynamicStatus">未激活</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 推荐列表 -->
+            <div class="card">
+                <h3>👥 推荐用户列表</h3>
+                <div id="referralList">
+                    <div style="text-align: center; padding: 2rem; opacity: 0.6;">
+                        暂无推荐用户
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 历史记录标签页 -->
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <h3>📋 交易历史</h3>
+                <div id="transactionHistory">
+                    <div style="text-align: center; padding: 2rem; opacity: 0.6;">
+                        暂无交易记录
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航栏（移动端） -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-items">
+            <a href="#" class="bottom-nav-item active" onclick="switchTab('invest')">
+                <div class="bottom-nav-icon">💰</div>
+                <div>投资</div>
+            </a>
+            <a href="#" class="bottom-nav-item" onclick="switchTab('rewards')">
+                <div class="bottom-nav-icon">📈</div>
+                <div>收益</div>
+            </a>
+            <a href="#" class="bottom-nav-item" onclick="switchTab('referral')">
+                <div class="bottom-nav-icon">🔗</div>
+                <div>推荐</div>
+            </a>
+            <a href="#" class="bottom-nav-item" onclick="switchTab('history')">
+                <div class="bottom-nav-icon">📋</div>
+                <div>历史</div>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        // 全局变量
+        let web3;
+        let contract;
+        let userAccount;
+        let selectedAmount = 0;
+
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuIcon = document.getElementById('menu-icon');
+            
+            if (mobileNav.classList.contains('show')) {
+                mobileNav.classList.remove('show');
+                menuIcon.textContent = '☰';
+            } else {
+                mobileNav.classList.add('show');
+                menuIcon.textContent = '✕';
+            }
+        }
+
+        // 标签页切换（优化移动端）
+        function switchTab(tabName) {
+            // 隐藏所有标签页内容
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 移除所有按钮的active状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 移除桌面版导航的active状态
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // 移除移动端导航的active状态
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // 移除底部导航的active状态
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 显示选中的标签页
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // 更新对应导航的active状态
+            const activeTabBtn = document.querySelector(`[onclick="switchTab('${tabName}')"]`);
+            if (activeTabBtn) {
+                if (activeTabBtn.classList.contains('tab-btn')) {
+                    activeTabBtn.classList.add('active');
+                } else if (activeTabBtn.classList.contains('bottom-nav-item')) {
+                    activeTabBtn.classList.add('active');
+                } else if (activeTabBtn.parentElement.classList.contains('nav-links')) {
+                    activeTabBtn.classList.add('active');
+                } else if (activeTabBtn.classList.contains('mobile-nav') || activeTabBtn.parentElement.classList.contains('mobile-nav')) {
+                    activeTabBtn.classList.add('active');
+                }
+            }
+            
+            // 更新所有对应的导航项
+            document.querySelectorAll(`[onclick*="switchTab('${tabName}')"]`).forEach(element => {
+                element.classList.add('active');
+            });
+            
+            // 加载对应页面数据
+            if (tabName === 'rewards') {
+                loadRewardsData();
+            } else if (tabName === 'referral') {
+                loadReferralData();
+            } else if (tabName === 'history') {
+                loadHistoryData();
+            }
+        }
+
+        // 投资档位选择
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除其他选中状态
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                
+                // 添加选中状态
+                this.classList.add('selected');
+                
+                // 设置选中金额
+                selectedAmount = parseInt(this.dataset.amount);
+                document.getElementById('customAmount').value = selectedAmount;
+            });
+        });
+
+        // 自定义金额输入
+        document.getElementById('customAmount').addEventListener('input', function() {
+            const amount = parseInt(this.value);
+            selectedAmount = amount;
+            
+            // 移除预设档位的选中状态
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                if (parseInt(btn.dataset.amount) !== amount) {
+                    btn.classList.remove('selected');
+                }
+            });
+            
+            // 如果输入的是预设档位，高亮对应按钮
+            const matchingBtn = document.querySelector(`[data-amount="${amount}"]`);
+            if (matchingBtn) {
+                matchingBtn.classList.add('selected');
+            }
+        });
+
+        // 连接钱包
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+                    const accounts = await web3.eth.getAccounts();
+                    userAccount = accounts[0];
+                    
+                    // 更新UI
+                    document.getElementById('wallet-status').textContent = 
+                        userAccount.substring(0, 6) + '...' + userAccount.substring(38);
+                    
+                    // 初始化合约
+                    initContract();
+                    
+                    // 加载用户数据
+                    loadUserData();
+                    
+                } catch (error) {
+                    console.error('连接钱包失败:', error);
+                    alert('连接钱包失败，请确保已安装MetaMask');
+                }
+            } else {
+                alert('请安装MetaMask钱包');
+            }
+        }
+
+        // 初始化合约
+        function initContract() {
+            // 这里需要替换为实际的合约地址和ABI
+            const contractAddress = '0x...'; // 合约地址
+            const contractABI = []; // 合约ABI
+            
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+        }
+
+        // 投资函数
+        async function invest() {
+            if (!userAccount) {
+                alert('请先连接钱包');
+                return;
+            }
+            
+            if (selectedAmount < 100) {
+                alert('最低投资金额为100 USDT');
+                return;
+            }
+            
+            try {
+                const referrer = document.getElementById('referrerAddress').value || '0x0000000000000000000000000000000000000000';
+                const amount = web3.utils.toWei(selectedAmount.toString(), 'ether');
+                
+                // 这里调用智能合约的invest函数
+                await contract.methods.invest(amount, referrer).send({
+                    from: userAccount,
+                    gas: 300000
+                });
+                
+                alert('投资成功！');
+                loadUserData();
+                
+            } catch (error) {
+                console.error('投资失败:', error);
+                alert('投资失败: ' + error.message);
+            }
+        }
+
+        // 领取静态收益
+        async function claimStatic() {
+            if (!userAccount) {
+                alert('请先连接钱包');
+                return;
+            }
+            
+            try {
+                await contract.methods.claimStatic().send({
+                    from: userAccount,
+                    gas: 200000
+                });
+                
+                alert('静态收益领取成功！');
+                loadRewardsData();
+                
+            } catch (error) {
+                console.error('领取失败:', error);
+                alert('领取失败: ' + error.message);
+            }
+        }
+
+        // 领取动态收益
+        async function claimDynamic() {
+            if (!userAccount) {
+                alert('请先连接钱包');
+                return;
+            }
+            
+            try {
+                await contract.methods.claimDynamic().send({
+                    from: userAccount,
+                    gas: 200000
+                });
+                
+                alert('动态收益领取成功！');
+                loadRewardsData();
+                
+            } catch (error) {
+                console.error('领取失败:', error);
+                alert('领取失败: ' + error.message);
+            }
+        }
+
+        // 领取等级奖励
+        async function claimLevel() {
+            if (!userAccount) {
+                alert('请先连接钱包');
+                return;
+            }
+            
+            try {
+                await contract.methods.claimLevelReward().send({
+                    from: userAccount,
+                    gas: 200000
+                });
+                
+                alert('等级奖励领取成功！');
+                loadRewardsData();
+                
+            } catch (error) {
+                console.error('领取失败:', error);
+                alert('领取失败: ' + error.message);
+            }
+        }
+
+        // 提币
+        async function withdraw() {
+            const amount = document.getElementById('withdrawAmount').value;
+            if (!amount || amount <= 0) {
+                alert('请输入有效的提币数量');
+                return;
+            }
+            
+            try {
+                const weiAmount = web3.utils.toWei(amount, 'ether');
+                await contract.methods.withdraw(weiAmount).send({
+                    from: userAccount,
+                    gas: 200000
+                });
+                
+                alert('提币成功！');
+                loadRewardsData();
+                
+            } catch (error) {
+                console.error('提币失败:', error);
+                alert('提币失败: ' + error.message);
+            }
+        }
+
+        // 复制推荐链接
+        function copyReferralLink() {
+            const referralInput = document.getElementById('referralLink');
+            referralInput.select();
+            document.execCommand('copy');
+            alert('推荐链接已复制到剪贴板');
+        }
+
+        // 加载用户数据
+        async function loadUserData() {
+            if (!contract || !userAccount) return;
+            
+            try {
+                // 获取用户当前周期信息
+                const cycleInfo = await contract.methods.getCurrentCycleInfo(userAccount).call();
+                const userSummary = await contract.methods.getUserSummary(userAccount).call();
+                
+                // 更新UI
+                document.getElementById('currentCycle').textContent = cycleInfo.cycle;
+                document.getElementById('cycleInvest').textContent = web3.utils.fromWei(cycleInfo.totalInvest, 'ether') + ' USDT';
+                document.getElementById('totalInvest').textContent = web3.utils.fromWei(userSummary.totalHistoryInvest, 'ether') + ' USDT';
+                document.getElementById('referralCount').textContent = userSummary.referralCount + ' 人';
+                
+                // 更新等级信息
+                updateLevelInfo(parseInt(web3.utils.fromWei(cycleInfo.totalInvest, 'ether')));
+                
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
+            }
+        }
+
+        // 加载收益数据
+        async function loadRewardsData() {
+            if (!contract || !userAccount) return;
+            
+            try {
+                const cycleInfo = await contract.methods.getCurrentCycleInfo(userAccount).call();
+                
+                document.getElementById('staticReward').textContent = web3.utils.fromWei(cycleInfo.availableStatic, 'ether') + ' RWA';
+                document.getElementById('dynamicReward').textContent = web3.utils.fromWei(cycleInfo.availableDynamic, 'ether') + ' RWA';
+                document.getElementById('claimedStatic').textContent = web3.utils.fromWei(cycleInfo.claimedStatic, 'ether') + ' RWA';
+                document.getElementById('claimedDynamic').textContent = web3.utils.fromWei(cycleInfo.claimedDynamic, 'ether') + ' RWA';
+                
+                // 更新按钮状态
+                document.getElementById('claimStaticBtn').disabled = cycleInfo.availableStatic == 0;
+                document.getElementById('claimDynamicBtn').disabled = cycleInfo.availableDynamic == 0;
+                
+            } catch (error) {
+                console.error('加载收益数据失败:', error);
+            }
+        }
+
+        // 加载推荐数据
+        async function loadReferralData() {
+            if (!contract || !userAccount) return;
+            
+            try {
+                // 更新推荐链接
+                document.getElementById('referralLink').value = `https://rwa-ido.com/?ref=${userAccount}`;
+                
+                // 这里可以加载推荐用户列表
+                
+            } catch (error) {
+                console.error('加载推荐数据失败:', error);
+            }
+        }
+
+        // 加载历史数据
+        function loadHistoryData() {
+            // 这里可以加载交易历史
+        }
+
+        // 更新等级信息
+        function updateLevelInfo(investAmount) {
+            const levels = [
+                { threshold: 50000, name: 'V1' },
+                { threshold: 80000, name: 'V2' },
+                { threshold: 100000, name: 'V3' },
+                { threshold: 300000, name: 'V4' },
+                { threshold: 700000, name: 'V5' },
+                { threshold: 1500000, name: 'V6' },
+                { threshold: 3000000, name: 'V7' },
+                { threshold: 7000000, name: 'V8' },
+                { threshold: 15000000, name: 'V9' },
+                { threshold: 30000000, name: 'V10' }
+            ];
+            
+            let currentLevel = 'V0';
+            let nextLevel = 'V1';
+            let progress = 0;
+            let nextThreshold = 50000;
+            
+            for (let i = 0; i < levels.length; i++) {
+                if (investAmount >= levels[i].threshold) {
+                    currentLevel = levels[i].name;
+                    if (i < levels.length - 1) {
+                        nextLevel = levels[i + 1].name;
+                        nextThreshold = levels[i + 1].threshold;
+                        progress = (investAmount - levels[i].threshold) / (nextThreshold - levels[i].threshold) * 100;
+                    } else {
+                        nextLevel = 'MAX';
+                        progress = 100;
+                    }
+                } else {
+                    nextThreshold = levels[i].threshold;
+                    progress = investAmount / nextThreshold * 100;
+                    break;
+                }
+            }
+            
+            document.getElementById('currentLevel').textContent = currentLevel;
+            document.getElementById('nextLevelInfo').textContent = 
+                nextLevel === 'MAX' ? '已达到最高等级' : `距离${nextLevel}还需 ${(nextThreshold - investAmount).toLocaleString()} USDT`;
+            document.getElementById('levelProgress').style.width = Math.min(progress, 100) + '%';
+        }
+
+        // 页面加载完成后检查钱包连接和设备类型
+        window.addEventListener('load', async () => {
+            // 检查是否为移动设备
+            if (window.innerWidth <= 768) {
+                // 移动端自动隐藏移动菜单
+                document.getElementById('mobileNav').classList.remove('show');
+            }
+            
+            // 检查钱包连接
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+                const accounts = await web3.eth.getAccounts();
+                if (accounts.length > 0) {
+                    userAccount = accounts[0];
+                    document.getElementById('wallet-status').textContent = 
+                        userAccount.substring(0, 6) + '...' + userAccount.substring(38);
+                    initContract();
+                    loadUserData();
+                }
+            }
+        });
+
+        // 监听屏幕旋转和尺寸变化
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                // 桌面端隐藏移动菜单
+                document.getElementById('mobileNav').classList.remove('show');
+                document.getElementById('menu-icon').textContent = '☰';
+            }
+        });
+
+        // 监听屏幕方向变化
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                // 方向改变后重新计算布局
+                if (window.innerWidth > 768) {
+                    document.getElementById('mobileNav').classList.remove('show');
+                    document.getElementById('menu-icon').textContent = '☰';
+                }
+            }, 100);
+        });
+
+        // 点击页面其他地方关闭移动菜单
+        document.addEventListener('click', (e) => {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!menuBtn.contains(e.target) && !mobileNav.contains(e.target)) {
+                mobileNav.classList.remove('show');
+                document.getElementById('menu-icon').textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>
