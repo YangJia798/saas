@@ -1,4 +1,4 @@
-function Invest() {
+export default function Invest() {
   return (
     <section>
       <h2>投资管理</h2>

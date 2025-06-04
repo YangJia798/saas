@@ -1,4 +1,4 @@
-function Header({ page, onNavigate }) {
+export default function Header({ page, onNavigate }) {
   return (
     <header className="header">
       <div className="nav-container">
